@@ -12,6 +12,7 @@ org.gradle.caching=true
 
 android.useAndroidX=true
 android.enableJetifier=true
+android.enableAapt2=false
 
 # For more details on what these properties do visit
 # https://github.com/wordpress-mobile/WordPress-Android/blob/develop/README.md
