@@ -125,17 +125,17 @@ jobs:
           name: Test WordPress
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD=1 ./gradlew testVanillaRelease --stacktrace --no-daemon
+          command: SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD=1 ./gradlew testVanillaRelease --stacktrace --scan
       - run:
           name: Test WordPressUtils
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: cd libs/utils && ./gradlew --stacktrace testReleaseUnitTest
+          command: cd libs/utils && ./gradlew --stacktrace testReleaseUnitTest --scan
       - run:
           name: Test WordPressProcessors
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: ./gradlew :libs:WordPressProcessors:test --stacktrace
+          command: ./gradlew :libs:WordPressProcessors:test --stacktrace --scan
       - android/save-gradle-cache
       - android/save-test-results
   lint:
@@ -159,17 +159,17 @@ jobs:
           name: Checkstyle
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: ./gradlew --stacktrace checkstyle
+          command: ./gradlew --stacktrace checkstyle --scan
       - run:
           name: ktlint
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: ./gradlew --stacktrace ciktlint
+          command: ./gradlew --stacktrace ciktlint --scan
       - run:
           name: Lint
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: ./gradlew --stacktrace lintVanillaRelease || (grep -A20 -B2 'severity="Error"' -r --include="*.xml" WordPress libs; exit 1)
+          command: ./gradlew --stacktrace lintVanillaRelease --scan || (grep -A20 -B2 'severity="Error"' -r --include="*.xml" WordPress libs; exit 1)
           no_output_timeout: 40m
       - run:
           name: Violations
@@ -178,7 +178,7 @@ jobs:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
           command: |
             if [ -n "$GITHUB_API_TOKEN" ]; then
-              ./gradlew --stacktrace violationCommentsToGitHub -DGITHUB_PULLREQUESTID=${CIRCLE_PULL_REQUEST##*/} -DGITHUB_OAUTH2TOKEN=$GITHUB_API_TOKEN
+              ./gradlew --stacktrace violationCommentsToGitHub -DGITHUB_PULLREQUESTID=${CIRCLE_PULL_REQUEST##*/} -DGITHUB_OAUTH2TOKEN=$GITHUB_API_TOKEN --scan
             else
               echo "Not posting lint errors to Github because \$GITHUB_API_TOKEN is not found"
             fi
@@ -220,7 +220,7 @@ jobs:
             VERSION_NAME="${PREFIX}-build-${CIRCLE_BUILD_NUM}"
             echo "export VERSION_NAME=$VERSION_NAME" >> $BASH_ENV
 
-            ./gradlew --stacktrace assembleJalapenoDebug -PversionName="$VERSION_NAME"
+            ./gradlew --stacktrace assembleJalapenoDebug -PversionName="$VERSION_NAME" --scan
       - android/save-gradle-cache
       - run:
           name: Prepare APK
@@ -331,7 +331,7 @@ jobs:
           name: Build
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: ./gradlew WordPress:assembleVanillaDebug WordPress:assembleVanillaDebugAndroidTest --stacktrace
+          command: ./gradlew WordPress:assembleVanillaDebug WordPress:assembleVanillaDebugAndroidTest --stacktrace --scan
       - run:
           name: Decrypt credentials
           command: openssl aes-256-cbc -md sha256 -d -in .circleci/.firebase.secrets.json.enc -out .circleci/.firebase.secrets.json -k "${FIREBASE_SECRETS_ENCRYPTION_KEY}"
@@ -385,7 +385,7 @@ jobs:
           name: Build
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: ./gradlew WordPress:assembleVanillaDebug WordPress:assembleVanillaDebugAndroidTest --stacktrace
+          command: ./gradlew WordPress:assembleVanillaDebug WordPress:assembleVanillaDebugAndroidTest --stacktrace --scan
       - run:
           name: Decrypt credentials
           command: openssl aes-256-cbc -md sha256 -d -in .circleci/.firebase.secrets.json.enc -out .circleci/.firebase.secrets.json -k "${FIREBASE_SECRETS_ENCRYPTION_KEY}"
@@ -492,7 +492,7 @@ jobs:
           name: Build
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
-          command: ./gradlew WordPress:assembleVanillaDebug && cd libs/utils && ./gradlew assembleAndroidTest --stacktrace
+          command: ./gradlew WordPress:assembleVanillaDebug --scan && cd libs/utils && ./gradlew assembleAndroidTest --stacktrace --scan
       - run:
           name: Decrypt credentials
           command: openssl aes-256-cbc -md sha256 -d -in .circleci/.firebase.secrets.json.enc -out .circleci/.firebase.secrets.json -k "${FIREBASE_SECRETS_ENCRYPTION_KEY}"
