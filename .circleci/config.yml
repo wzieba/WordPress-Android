@@ -26,7 +26,7 @@ commands:
       steps:
         - run:
             name: Update memory setting
-            command: sed -i "s/org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false /" gradle.properties
+            command: sed -i "s/org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false /" gradle.properties
   npm-install:
     steps:
       - restore_cache:
@@ -237,7 +237,7 @@ jobs:
     environment:
       JVM_OPTS: -Xmx2048m
     steps:
-      - run: 
+      - run:
           name: Init messages
           command: |
             echo "export SLACK_FAILURE_MESSAGE=':red_circle: Build for WordPress Android failed!'" >> $BASH_ENV
@@ -265,24 +265,24 @@ jobs:
             brew install openjdk
             brew install bundletool
             echo "export PATH='/home/linuxbrew/.linuxbrew/Cellar/bundletool/1.2.0/bin:$PATH'" >> $BASH_ENV
-      - run: 
+      - run:
           name: Prepare build
           command: |
-            echo "export APP_VERSION=$(./gradlew -q printVersionName | tail -1)" >> $BASH_ENV 
+            echo "export APP_VERSION=$(./gradlew -q printVersionName | tail -1)" >> $BASH_ENV
             SLACK_MESSAGE_VERSION=$(./gradlew -q printVersionName | tail -1)
             echo "export SLACK_FAILURE_MESSAGE=':red_circle: Build for WordPress Android $SLACK_MESSAGE_VERSION failed!'" >> $BASH_ENV
             echo "export SLACK_SUCCESS_MESSAGE=':tada: WordPress Android $SLACK_MESSAGE_VERSION has been deployed!'" >> $BASH_ENV
             bundle check
       - run:
-          name: Build Zalpha 
+          name: Build Zalpha
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
           command: |
             if [[ ${APP_VERSION} == *"-rc-"* ]]; then
               bundle exec fastlane build_alpha skip_confirm:true skip_prechecks:true create_release:true upload_to_play_store:true
-            fi 
+            fi
           no_output_timeout: 15m
-      - run: 
+      - run:
           name: Build Vanilla
           environment:
             SUPPRESS_GUTENBERG_MOBILE_JS_BUNDLE_BUILD: 1
@@ -375,7 +375,7 @@ jobs:
           command: mkdir -p libs/gutenberg-mobile/gutenberg/packages/react-native-bridge/android/src/main/assets
       - attach_workspace:
           at: libs/gutenberg-mobile/gutenberg/packages/react-native-bridge/android/src/main/assets
-      - run: 
+      - run:
           name: Setup assets
           command: |
             INDEX_BUNDLE_PATH="libs/gutenberg-mobile/gutenberg/packages/react-native-bridge/android/build/assets/index.android.bundle"
@@ -561,7 +561,7 @@ jobs:
           command: |
             mkdir -p Artifacts
             mv WordPress/build/outputs/apk/jalapeno/release/org.wordpress.android-jalapeno-release.apk "Artifacts/WordPress-${VERSION_NAME}.apk"
-      - run: 
+      - run:
           name: Upload APK
           command: |
             curl --http1.1 https://${APPET_TOKEN}@api.appetize.io/v1/apps/${APPET_APPID} -F "file=@Artifacts/WordPress-${VERSION_NAME}.apk" -F "platform=android"
@@ -654,7 +654,7 @@ workflows:
 #              only: /^\d+(\.\d+)*(-rc-\d)?$/
 #      - Release Build:
 #          requires:
-#            - lint 
+#            - lint
 #          filters:
 #            branches:
 #              ignore: /.*/
