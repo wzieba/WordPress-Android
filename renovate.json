@@ -16,7 +16,8 @@
       "enabledManagers": ["gradle"],
       "matchDepPatterns":["automattic"],
       "enabled": true,
-      "versioning": "semver-coerced"
+      "versioning": "semver-coerced",
+      "separateMultipleMajor": false
     }
 	]
 }
