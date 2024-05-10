@@ -11,6 +11,12 @@
 		{
       "matchDepPatterns":["automattic"],
 			"enabled": true
-		}
+		},
+    {
+      "enabledManagers": ["gradle"],
+      "matchDepPatterns":["automattic"],
+      "enabled": true,
+      "versioning": "semver-coerced"
+    }
 	]
 }
