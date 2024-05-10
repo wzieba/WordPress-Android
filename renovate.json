@@ -10,6 +10,7 @@
 		},
 		{
       "matchPackagePatterns": ["^automattic"],
+      "matchDepPatterns":["^automattic"],
 			"enabled": true
 		}
 	]
