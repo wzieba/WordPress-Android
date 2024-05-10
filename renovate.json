@@ -1,0 +1,24 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+		{
+			"packagePatterns": ["*"],
+			"enabled": false
+		},
+		{
+      "matchDepPatterns":["automattic"],
+      "separateMajorMinor": false,
+			"enabled": true
+		},
+    {
+      "enabledManagers": ["gradle"],
+      "matchDepPatterns":["automattic"],
+      "enabled": true,
+      "versioning": "semver-coerced",
+      "separateMajorMinor": false
+    }
+	]
+}
