@@ -9,7 +9,6 @@
 			"enabled": false
 		},
 		{
-      "matchPackagePatterns": ["^automattic"],
       "matchDepPatterns":["^automattic"],
 			"enabled": true
 		}
