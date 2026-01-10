@@ -21,7 +21,7 @@ ext {
 
 ext {
     // libs
-    automatticAboutVersion = '1.4.0'
+    automatticAboutVersion = '1.7.1'
     automatticRestVersion = '1.0.8'
     automatticTracksVersion = '5.1.0'
     gutenbergMobileVersion = 'v1.121.0-alpha1'
